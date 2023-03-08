@@ -1,0 +1,15 @@
+#include <Servo.h>
+#include "CytronMotorDriver.h"
+
+const int STEERING_SERVO_PIN = 2;
+const float MIN_STEERING_ANGLE = 38;
+const float MAX_STEERING_ANGLE = 145;
+
+const float NEUTRAL_STEERING_ANGLE = 90.0;
+const float NEUTRAL_THROTTLE = 0.0;
+
+Servo steeringServo;
+
+#define COMMAND_RATE 20 //hz
+
+CytronMD motor(PWM_DIR, 3, 6);
