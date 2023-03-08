@@ -13,3 +13,6 @@ Servo steeringServo;
 #define COMMAND_RATE 20 //hz
 
 CytronMD motor(PWM_DIR, 3, 6);
+
+const float wheel_circum = 0.26430197; //measured physically
+const float wheel_x_distance = 0.28;

@@ -12,29 +12,58 @@
 // #include <ackermann_msgs/AckermannDrive.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/TwistStamped.h>
+#include <custom_msgs/pid_msg.h>
+#include <custom_msgs/velocity_msg.h>
+
+
+#include <sstream>
 
 ArduPID pid;
 
 void vel_callback(const geometry_msgs::TwistStamped& cmd_msg);
-
+void PID_callback(const custom_msgs::pid_msg& PID_);
 
 ros::NodeHandle nh;
 
-std_msgs::Float32 vel_msg;
-std_msgs::Int32 pid_msg;
-std_msgs::Float32 theta_servo_msg;
+
+custom_msgs::velocity_msg vel_msg;
+std_msgs::Int32 pid_msg_;
 
 
-ros::Publisher pid_output_pub("/pid_op", &pid_msg);
+
+ros::Publisher pid_output_pub("/pid_op", &pid_msg_);
 ros::Publisher vel_publisher("/curr_vel", &vel_msg);
-ros::Publisher theta_pub("/theta_servo", &theta_servo_msg);
+
 
 ros::Subscriber<geometry_msgs::TwistStamped> cmd_sub("/cmd_vel_", vel_callback);
+ros::Subscriber<custom_msgs::pid_msg> pid_sub("/pid", PID_callback);
 
 float linear_vel_x = 0.0;
 float angular_vel_z = 0.0;
 
 unsigned long prev_command_time = 0;
+
+void PID_callback(const custom_msgs::pid_msg& PID_)
+{
+  kp_ = PID_.Kp;
+  ki_ = PID_.Ki;
+  kd_ = PID_.Kd;
+  PID_f = 1;
+}
+
+
+void vel_callback(const geometry_msgs::TwistStamped& cmd_msg)
+{
+
+  f = 1;
+
+  linear_vel_x = cmd_msg.twist.linear.x;
+
+  angular_vel_z = cmd_msg.twist.angular.z;
+  
+  prev_command_time = millis();
+
+}
 
 float getVelocity(long deltaTicks_, int deltaTime_)
 {
@@ -52,19 +81,6 @@ float getPID(float ip_vel, float stpt){
   pid.compute();
 
   return op_;
-}
-
-void vel_callback(const geometry_msgs::TwistStamped& cmd_msg)
-{
-
-  f = 1;
-
-  linear_vel_x = cmd_msg.twist.linear.x;
-
-  angular_vel_z = cmd_msg.twist.angular.z;
-  
-  prev_command_time = millis();
-
 }
 
 int velocityToRPM(float v)
@@ -111,13 +127,14 @@ void move_car(float vel_stpt, float theta)
 
   }
 
-  pid_msg.data = op_;
+  pid_msg_.data = op_;
 
   motor.setSpeed(pwm); 
 
-  float curr_steer_ang = getThetaFromSteer(steer(theta));
+  servo_ang = steer(theta);
 
-  theta_servo_msg.data = curr_steer_ang;
+  float curr_steer_ang = getThetaFromSteer(servo_ang);
+
 
   return;
 
@@ -167,9 +184,10 @@ void setup()
 
   nh.advertise(vel_publisher);
   nh.advertise(pid_output_pub);
-  nh.advertise(theta_pub);
+
 
   nh.subscribe(cmd_sub);
+  nh.subscribe(pid_sub);
   // nh.subscribe(ackermannSubscriber);
 
   pinMode(13, OUTPUT);
@@ -193,22 +211,29 @@ void setup()
   nh.loginfo("BASE CONNECTED");
   delay(1000);
 
+  std::stringstream ss;
   
-  /* 
-  if(!nh.getParam("/pid/Kp", &kp_, 1)){
-    kp_ = 0.085;
+  
+  if(!nh.getParam("/pid/Kp", &kp_, 1))
+  {
     nh.logwarn("default param used for Kp");
   }
-  if(!nh.getParam("/pid/Ki", &ki_, 1)){
-    ki_ = 0.08;
+  
+  if(!nh.getParam("/pid/Ki", &ki_, 1))
+  {
     nh.logwarn("default param used for Ki");
   }
-  if(!nh.getParam("/pid/Kd", &kd_, 1)){
-    kd_ = 0.015;
+
+  if(!nh.getParam("/pid/Kd", &kd_, 1))
+  {
     nh.logwarn("default param used for Kd");
   }
 
-  */
+  //display values after loading up
+  ss << "Kp: " << kp_ << ", Ki: " << ki_ << ", Kd: " << kd_;
+
+  nh.loginfo(ss.str().c_str());
+
 
 }
 
@@ -250,13 +275,23 @@ void loop()
 
     move_car(linear_vel_x, angular_vel_z);
 
-    vel_msg.data = velocity;
+    vel_msg.vel_x = velocity;
+    vel_msg.vel_y = 0;
+
+    if(servo_ang == 90)   //handle for tan(90) which is undefined
+    {
+      vel_msg.vel_z = 0;      
+    }
+
+    else 
+    {
+      vel_msg.vel_z = (velocity * tan(servo_ang)) / wheel_x_distance;
+    }
+    
 
     vel_publisher.publish(&vel_msg);
 
-    pid_output_pub.publish(&pid_msg);
-
-    theta_pub.publish(&theta_servo_msg);
+    pid_output_pub.publish(&pid_msg_);
 
     prev_control_time = millis();
 
@@ -270,19 +305,30 @@ void loop()
   }
 
 
-  if(f == 1)
+  // if(f == 1)
+  // {
+  //   nh.loginfo("callback called!");
+
+  //   f = 0;
+
+  // }
+
+  // else 
+  // {
+
+  //   nh.loginfo("no data received!");
+
+  // }
+
+  if(PID_f)
   {
-    nh.loginfo("callback called!");
+    std::stringstream sss;
 
-    f = 0;
+    sss << "Kp: " << kp_ << ", Ki: " << ki_ << ", Kd: " << kd_;
 
-  }
+    nh.loginfo(sss.str().c_str());
 
-  else 
-  {
-
-    nh.loginfo("no data received!");
-
+    PID_f = 0;
   }
 
   nh.spinOnce();
