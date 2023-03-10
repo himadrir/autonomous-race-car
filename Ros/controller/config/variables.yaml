@@ -1,0 +1,6 @@
+wheel_ratio: 0.0003096  # wheel constant
+wheel_dia: 0.08413 # in meters
+wheel_circum: 0.26430197  # in meters
+rear_wheel: 0.2344  # in meters
+wheel_base: 0.2835  # in meters distance between front and rear wheel
+odom_frame_name: "odom"

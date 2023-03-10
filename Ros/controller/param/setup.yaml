@@ -1,0 +1,8 @@
+# ROS parameter file
+# PID gains for control system
+
+pid:
+  Kp: 0.085
+  Ki: 0.08
+  Kd: 0.015
+

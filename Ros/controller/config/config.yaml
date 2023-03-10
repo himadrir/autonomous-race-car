@@ -1,0 +1,5 @@
+left_camera_topic: /car_1/camera/left/image_raw
+right_camera_topic: /car_1/camera/right/image_raw
+left_camera_info_topic: /car_1/camera/left/camera_info
+right_camera_info_topic: /car_1/camera/right/camera_info
+MaxObstacleHeight: 1.0

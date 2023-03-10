@@ -1,0 +1,12 @@
+<launch>    
+	<rosparam command="load" file="$(find controller)/param/setup.yaml" />
+
+	<node name="motor_controller" pkg="rosserial_python" type="serial_node.py" output="screen">
+		<param name="port" value="/dev/ttyACM0"/>
+	</node>
+	<arg name="transforms" default="0 0 0.035 0 0 0 1 base_footprint base_link" />
+  	<param name="transforms" value="$(arg transforms)" />
+	<node name="my_static_tf_broadcaster" pkg="tf2_ros" type="static_transform_publisher" args="$(arg transforms)" />
+
+	<node name="wheel_odom" pkg="controller" type="odom.py"/>
+</launch>
