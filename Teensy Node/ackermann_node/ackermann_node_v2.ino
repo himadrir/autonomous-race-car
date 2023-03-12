@@ -143,7 +143,8 @@ void move_car(float vel_stpt, float theta)
 float steer(float steering_angle)
 {
   
-  float sa = constrain((steering_angle * (180 / M_PI) + 90), MIN_STEERING_ANGLE, MAX_STEERING_ANGLE);
+  // float sa = constrain((steering_angle * (180 / M_PI) + 90), MIN_STEERING_ANGLE, MAX_STEERING_ANGLE);
+  float sa = constrain(90 - (steering_angle * (180 / M_PI)), MIN_STEERING_ANGLE, MAX_STEERING_ANGLE);
   
   steeringServo.write(sa);
   
@@ -275,7 +276,12 @@ void loop()
 
     move_car(linear_vel_x, angular_vel_z);
 
-    vel_msg.vel_x = velocity;
+    if (linear_vel_x < 0)     // check if input velocity is zero so we can set sign of reported velocity accordingly
+    {
+      velocity = -velocity;
+    }
+
+    vel_msg.vel_x = velocity;    
     vel_msg.vel_y = 0;
 
     if(servo_ang == 90)   //handle for tan(90) which is undefined
@@ -285,7 +291,7 @@ void loop()
 
     else 
     {
-      vel_msg.vel_z = (velocity * tan(servo_ang)) / wheel_x_distance;
+      vel_msg.vel_z = (velocity * tan(servo_ang * 0.0174533)) / wheel_x_distance; // 0.0174533 value of pi/180
     }
     
 
