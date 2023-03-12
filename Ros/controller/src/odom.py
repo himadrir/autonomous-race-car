@@ -45,18 +45,22 @@ def vel_cb(velocity):
     odom_msg.pose.pose.position.y = y_
     odom_msg.pose.pose.position.z = 0.0
 
-    odom_msg.pose.pose.orientation.x = 0.0
-    odom_msg.pose.pose.orientation.y = 0.0
-    odom_msg.pose.pose.orientation.z = math.sin(yaw/2.0)
-    odom_msg.pose.pose.orientation.w = math.cos(yaw/2.0)
+    odom_msg.pose.pose.orientation.x = odom_quat.x
+    odom_msg.pose.pose.orientation.y = odom_quat.y
+    odom_msg.pose.pose.orientation.z = odom_quat.z
+    odom_msg.pose.pose.orientation.w = odom_quat.w
 
-    odom_msg.pose.covariance[0] = 0.2
-    odom_msg.pose.covariance[7] = 0.2
-    odom_msg.pose.covariance[35] = 0.4
+    odom_msg.pose.covariance[0] = 0.001
+    odom_msg.pose.covariance[7] = 0.002
+    odom_msg.pose.covariance[35] = 0.004
 
     odom_msg.twist.twist.linear.x = vel_x
     odom_msg.twist.twist.linear.y = 0.0
     odom_msg.twist.twist.angular.z = vel_z
+
+    odom_msg.twist.covariance[0] = 0.0001
+    odom_msg.twist.covariance[7] = 0.0001
+    odom_msg.twist.covariance[35] = 0.0001
 
     odom_pub.publish(odom_msg)
 
