@@ -11,6 +11,8 @@ yaw, x_, y_ = 0.0, 0.0, 0.0
 
 curr_time, last_time = 0, 0
 
+broadcast_odom_flag_ = False
+
 
 def vel_cb(velocity):
     global vel_x, vel_y, vel_z
@@ -34,7 +36,9 @@ def vel_cb(velocity):
     yaw += delta_heading
 
     odom_quat = tf.transformations.quaternion_from_euler(0, 0, yaw)
-    odom_broadcaster.sendTransform((x_, y_, 0.0), odom_quat, curr_time, "base_footprint", "odom")
+
+    if broadcast_odom_flag_:
+        odom_broadcaster.sendTransform((x_, y_, 0.0), odom_quat, curr_time, "base_footprint", "odom")
 
     odom_msg = Odometry()
     odom_msg.header.frame_id = "odom"
@@ -66,12 +70,16 @@ def vel_cb(velocity):
 
 
 if __name__ == '__main__':
+    global broadcast_odom_flag_
     rospy.init_node('raw_wheel_odom_pub', anonymous=True)
     curr_time = rospy.Time.now()
     last_time = rospy.Time.now()
 
     odom_pub = rospy.Publisher("/raw_wheel_odom_ackermann", Odometry, queue_size=10)
+
     odom_broadcaster = tf.TransformBroadcaster()
     rospy.Subscriber("/curr_vel", velocity_msg, vel_cb)
+    if rospy.has_param('broadcast_odom_flag'):
+        broadcast_odom_flag_ = rospy.get_param('broadcast_odom_flag')
 
     rospy.spin()
