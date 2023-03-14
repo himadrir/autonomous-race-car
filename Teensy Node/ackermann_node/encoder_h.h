@@ -12,9 +12,10 @@ long prevCount = 0;
 float velocity = 0;
 long deltaCount = 0;
 
-double setpoint_, ip_, op_;
+double setpoint_ = 0.0, ip_, op_;
 const float enc_to_wheel_ratio = 0.017543;
 int f = 0;
 int PID_f = 0;
 float servo_ang = 0.0;
+bool flag = true;
 // int flag;

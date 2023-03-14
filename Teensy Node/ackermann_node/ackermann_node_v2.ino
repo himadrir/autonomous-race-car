@@ -76,7 +76,10 @@ float getPID(float ip_vel, float stpt){
 
   ip_ = ip_vel;
 
-  setpoint_ = stpt;
+  if(stpt != setpoint_)
+  {
+    setpoint_ = stpt;
+  }
 
   pid.compute();
 
@@ -198,7 +201,9 @@ void setup()
 
   motor.setSpeed(0);
 
+
   pid.begin(&ip_, &op_, &setpoint_, kp_, ki_, kd_);
+
 
 
   steeringServo.attach(STEERING_SERVO_PIN);
@@ -212,34 +217,40 @@ void setup()
   nh.loginfo("BASE CONNECTED");
   delay(1000);
 
-  std::stringstream ss;
-  
-  
-  if(!nh.getParam("/pid/Kp", &kp_, 1))
-  {
-    nh.logwarn("default param used for Kp");
-  }
-  
-  if(!nh.getParam("/pid/Ki", &ki_, 1))
-  {
-    nh.logwarn("default param used for Ki");
-  }
-
-  if(!nh.getParam("/pid/Kd", &kd_, 1))
-  {
-    nh.logwarn("default param used for Kd");
-  }
-
-  //display values after loading up
-  ss << "Kp: " << kp_ << ", Ki: " << ki_ << ", Kd: " << kd_;
-
-  nh.loginfo(ss.str().c_str());
-
 
 }
 
 void loop() 
 {
+
+  while(flag)
+  {
+
+    if(!nh.getParam("/pid/Kp", &kp_, 1))
+    {
+      nh.logwarn("default param used for Kp");
+    }
+    
+    if(!nh.getParam("/pid/Ki", &ki_, 1))
+    {
+      nh.logwarn("default param used for Ki");
+    }
+
+    if(!nh.getParam("/pid/Kd", &kd_, 1))
+    {
+      nh.logwarn("default param used for Kd");
+    }
+
+    std::stringstream ss;
+
+    //display values after loading up
+    ss << "Kp: " << kp_ << ", Ki: " << ki_ << ", Kd: " << kd_;
+
+    nh.loginfo(ss.str().c_str());
+
+    flag = false;
+    
+  }
 
   static unsigned long prev_control_time = 0;
 
@@ -266,6 +277,8 @@ void loop()
   {
 
     stop_car();
+    pid.reset();
+    flag = true;
 
   }
 
@@ -311,22 +324,7 @@ void loop()
   }
 
 
-  // if(f == 1)
-  // {
-  //   nh.loginfo("callback called!");
-
-  //   f = 0;
-
-  // }
-
-  // else 
-  // {
-
-  //   nh.loginfo("no data received!");
-
-  // }
-
-  if(PID_f)
+  if(PID_f)    // debug for if PID received by callback
   {
     std::stringstream sss;
 
