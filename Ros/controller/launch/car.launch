@@ -2,6 +2,9 @@
 <launch>    
 	<rosparam command="load" file="$(find controller)/param/setup.yaml" />
 
+	<arg name="enable_mapping" default="false"/>
+	<arg name="enable_amcl" default="true"/>
+
 	<node name="motor_controller" pkg="rosserial_python" type="serial_node.py" output="screen">
 		<param name="port" value="/dev/motor_driver"/>
 	</node>
@@ -37,7 +40,10 @@
 
 	<include file="$(find laser_scan_matcher_odometry)/launch/example.launch"/>
 
-	<node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
+	<!--<node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
         	<rosparam command="load" file="$(find controller)/param/ekf.yaml"/>
-  	</node>
+  	</node> -->
+
+	<include if="$(arg enable_amcl)" file="$(find controller)/launch/include/amcl.launch"/>
+	<include if="$(arg enable_mapping)" file="$(find hector_slam_launch)/launch/tutorial.launch" />
 </launch>

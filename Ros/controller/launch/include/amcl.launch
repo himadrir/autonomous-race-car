@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+	<arg name="enable_map_server" default="true"/>
+	<group if="$(arg enable_map_server)">
+        	<arg name="map_file" default="$(find controller)/maps/map.yaml"/>
+        	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+	</group>
+	<node pkg="amcl" type="amcl" name="amcl" output="screen">
+	    <param name="odom_frame_id"             value="odom"/>
+	    <param name="odom_model_type"           value="diff"/>
+	    <param name="base_frame_id"             value="base_footprint"/>
+	    <param name="update_min_d"              value="-1"/>
+	    <param name="update_min_a"              value="-1"/>
+	    <param name="odom_alpha1"               value="0.35"/> 
+	    <param name="odom_alpha2"               value="0.35"/>
+	 </node>
+
+
+</launch>
