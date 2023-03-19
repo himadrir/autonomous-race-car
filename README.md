@@ -3,3 +3,6 @@
 
 <br />
 custom msgs for sending velocity(V_x, V_y, V_z) and pid(Float32 Kp, Float32 Ki, Float32 Kd) are used.
+
+<br />
+Odom source: laser_scan_matcher + IMU + wheel_odom
