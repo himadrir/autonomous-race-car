@@ -27,8 +27,8 @@ def vel_cb(velocity):
 
     last_time = curr_time
 
-    delta_x = vel_x * math.cos(yaw) * dt
-    delta_y = vel_x * math.sin(yaw) * dt
+    delta_x = vel_x * math.cos(yaw + vel_z*dt) * dt
+    delta_y = vel_x * math.sin(yaw + vel_z*dt) * dt
     delta_heading = vel_z * dt
 
     x_ += delta_x
@@ -49,10 +49,10 @@ def vel_cb(velocity):
     odom_msg.pose.pose.position.y = y_
     odom_msg.pose.pose.position.z = 0.0
 
-    odom_msg.pose.pose.orientation.x = odom_quat.x
-    odom_msg.pose.pose.orientation.y = odom_quat.y
-    odom_msg.pose.pose.orientation.z = odom_quat.z
-    odom_msg.pose.pose.orientation.w = odom_quat.w
+    odom_msg.pose.pose.orientation.x = 0
+    odom_msg.pose.pose.orientation.y = 0
+    odom_msg.pose.pose.orientation.z = math.sin(yaw)
+    odom_msg.pose.pose.orientation.w = math.cos(yaw)
 
     odom_msg.pose.covariance[0] = 0.001
     odom_msg.pose.covariance[7] = 0.002
