@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import rospy
 from geometry_msgs.msg import TwistStamped
 from sensor_msgs.msg import LaserScan
@@ -14,7 +15,7 @@ car_vel = 0.0
 Kp = 1.00
 Ki = 0.005
 Kd = 0.001
-distance_to_maintain = 0.5
+distance_to_maintain = 0.185
 
 
 def vel_callback(curr_vel):
