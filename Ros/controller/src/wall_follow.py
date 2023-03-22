@@ -15,7 +15,7 @@ car_vel = 0.0
 Kp = 1.00
 Ki = 0.005
 Kd = 0.001
-distance_to_maintain = 0.185
+distance_to_maintain = 0.23
 
 
 def vel_callback(curr_vel):
@@ -32,8 +32,8 @@ def laser_callback(lidar_msg):
     dt_laser = laser_t_now - laser_prev_time
 
     b_index = abs(floor((1.5708 - lidar_msg.angle_min) / lidar_msg.angle_increment))
-    b_angle = 1.5708  # 90 deg
-    a_angle = 0.785398  # 45 deg
+    b_angle = 1.22173   # 70 deg  1.5708 for 90 deg
+    a_angle = 0.523599  # 30 deg 0.785398 for 45 deg
 
     if lidar_msg.angle_min > 0.785398:
         a_angle = lidar_msg.angle_min
@@ -51,7 +51,12 @@ def laser_callback(lidar_msg):
     else:
         b_ = 100
 
-    alpha = atan((a_ * cos(b_angle - a_angle) - b_) / (a_ * sin(b_angle - a_angle)))
+    try:
+        alpha = atan((a_ * cos(b_angle - a_angle) - b_) / (a_ * sin(b_angle - a_angle)))
+
+    except ZeroDivisionError as e:
+        alpha = 0
+
     d = b_ * cos(alpha)
     # d_ = d + 1.00 * sin(alpha) #replace 1 with curr velocity read from the topic /curr_vel * dt for distance
     d_ = d + (car_vel * dt_laser) * sin(alpha)
@@ -77,7 +82,7 @@ def pid_controller(error):
     vel_msg.twist.linear.x = 0.3
 
     # @todo: adaptive speed for the car
-
+    rospy.loginfo("theta: %.2f", theta)
     cmd_vel_pub.publish(vel_msg)
 
     prev_time = t_now
