@@ -3,12 +3,16 @@
 	<rosparam command="load" file="$(find controller)/param/setup.yaml" />
 
 	<arg name="enable_mapping" default="false"/>
-	<arg name="enable_amcl" default="true"/>
+	<arg name="enable_amcl" default="false"/>
+	<arg name="enable_wf" default="true"/>
+	<arg name="enable_ackermann_odom" default="false"/>
 
 	<node name="motor_controller" pkg="rosserial_python" type="serial_node.py" output="screen">
 		<param name="port" value="/dev/motor_driver"/>
 	</node>
-	
+
+	<node if="$(arg enable_wf)" name="wall_follow" pkg="controller" type="wall_follow.py" output="screen"/>
+
 	<arg name="transforms" default="0 0 0.035 0 0 0 1 base_footprint base_link" />
 	
 	<arg name="imu_transforms" default="0.125 0 0.11 0 0 0 1 base_link imu"/>
@@ -19,7 +23,7 @@
 	<node name="base_link_basefootprint_tf" pkg="tf2_ros" type="static_transform_publisher" args="$(arg transforms)" />
 	<node name="base_link_imu_tf" pkg="tf2_ros" type="static_transform_publisher" args="$(arg imu_transforms)" />
 
-	<node name="wheel_odom" pkg="controller" type="odom.py"/>
+	<node if="$(arg enable_ackermann_odom)" name="wheel_odom" pkg="controller" type="odom.py"/>
 	
 	<include file="$(find ldlidar_stl_ros)/launch/ld19.launch"/>
 
