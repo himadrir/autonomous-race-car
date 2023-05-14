@@ -40,6 +40,7 @@ ros::Subscriber<custom_msgs::pid_msg> pid_sub("/pid", PID_callback);
 
 float linear_vel_x = 0.0;
 float angular_vel_z = 0.0;
+float vel_data = 0.0;
 
 unsigned long prev_command_time = 0;
 
@@ -109,35 +110,37 @@ void move_car(float vel_stpt, float theta)
 
   static int pwm = 0;
 
+  pwm = (int)getPID(velocity, abs(vel_stpt));
+  pid_msg_.data = pwm;
+
   if(vel_stpt < 0.0)
   {
-
-    pwm = -(getPID(velocity, abs(vel_stpt)));
+    // pwm = -( getPID( velocity, abs(vel_stpt) ));
+    motor.setSpeed(-pwm);
 
   }
 
-  else 
+  else if(vel_stpt > 0.0)
   { 
-
-    pwm = getPID(velocity, abs(vel_stpt));
+    // pwm = getPID( velocity, abs(vel_stpt) );
+    motor.setSpeed(pwm);
   
   }
 
-  if ( (vel_stpt == 0.0) && (pwm != 0) )
+  // if ( (vel_stpt == 0.0) && (pwm != 0) )
+  else
   {
-
-    pwm = 0;
+    // pwm = 0;
+    motor.setSpeed(0);
+    // pid.reset();
 
   }
 
-  pid_msg_.data = op_;
-
-  motor.setSpeed(pwm); 
+  // motor.setSpeed(pwm); 
 
   servo_ang = steer(theta);
 
-  float curr_steer_ang = getThetaFromSteer(servo_ang);
-
+  // float curr_steer_ang = getThetaFromSteer(servo_ang);
 
   return;
 
@@ -146,21 +149,14 @@ void move_car(float vel_stpt, float theta)
 float steer(float steering_angle)
 {
   
-  // float sa = constrain((steering_angle * (180 / M_PI) + 90), MIN_STEERING_ANGLE, MAX_STEERING_ANGLE);
-  float sa = constrain(90 - (steering_angle * (180 / M_PI)), MIN_STEERING_ANGLE, MAX_STEERING_ANGLE);
+  float sa = constrain((steering_angle * (180 / M_PI) + 90), MIN_STEERING_ANGLE, MAX_STEERING_ANGLE);
+  //float sa = constrain(90 - (steering_angle * (180 / M_PI)), MIN_STEERING_ANGLE, MAX_STEERING_ANGLE);
   
   steeringServo.write(sa);
   
   return sa;  
 
 }
-
-float getThetaFromSteer(float sa_)
-{
-  return ((sa_ - 90) * (M_PI/180));
-}
-
-
 
 void isr1()
 {
@@ -201,10 +197,7 @@ void setup()
 
   motor.setSpeed(0);
 
-
   pid.begin(&ip_, &op_, &setpoint_, kp_, ki_, kd_);
-
-
 
   steeringServo.attach(STEERING_SERVO_PIN);
   steeringServo.write(NEUTRAL_STEERING_ANGLE);
@@ -216,7 +209,6 @@ void setup()
 
   nh.loginfo("BASE CONNECTED");
   delay(1000);
-
 
 }
 
@@ -289,25 +281,30 @@ void loop()
 
     move_car(linear_vel_x, angular_vel_z);
 
-    if (linear_vel_x < 0)     // check if input velocity is zero so we can set sign of reported velocity accordingly
+    if (linear_vel_x < 0)     // check if input velocity is less than zero so we can set sign of reported velocity accordingly
     {
-      velocity = -velocity;
+      vel_data = -velocity;
     }
 
-    vel_msg.vel_x = velocity;    
+    else {
+    vel_data = velocity;
+    }
+
+    vel_msg.vel_x = vel_data;    
     vel_msg.vel_y = 0;
+    //change added: 5/12
+    vel_msg.vel_z = (velocity * tan((servo_ang-90) * 0.0174533)) / wheel_x_distance; // 0.0174533 value of pi/180
 
-    if(servo_ang == 90)   //handle for tan(90) which is undefined
-    {
-      vel_msg.vel_z = 0;      
-    }
+    // if(servo_ang == 90)   //handle for tan(90) which is undefined
+    // {
+    //   vel_msg.vel_z = 0;      
+    // }
 
-    else 
-    {
-      vel_msg.vel_z = (velocity * tan(servo_ang * 0.0174533)) / wheel_x_distance; // 0.0174533 value of pi/180
-    }
+    // else 
+    // {
+    //   vel_msg.vel_z = (velocity * tan((servo_ang-90) * 0.0174533)) / wheel_x_distance; // 0.0174533 value of pi/180
+    // }
     
-
     vel_publisher.publish(&vel_msg);
 
     pid_output_pub.publish(&pid_msg_);
