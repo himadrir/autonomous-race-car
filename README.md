@@ -1,4 +1,4 @@
-# self-driving-car
+# Autonomous Race Car
 checkout [wiki](https://github.com/himadrir/self-driving-car/wiki) for updates on progress.
 
 ## Dependencies 
@@ -10,4 +10,7 @@ checkout [wiki](https://github.com/himadrir/self-driving-car/wiki) for updates o
 - [witmotion imu ros driver](https://github.com/ElettraSciComp/witmotion_IMU_ros)
 - [rosserial dreiver](http://wiki.ros.org/rosserial)
 
-<strong> Odom source: </strong> laser_scan_matcher + IMU + wheel_odom
+## TF tree
+map -> odom -> base_footprint -> base_link  
+
+imu and laser connected to base_link
