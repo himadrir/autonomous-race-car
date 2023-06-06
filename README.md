@@ -1,12 +1,13 @@
-<h1>self-driving-car based on f11/10</h1>
+# self-driving-car
+checkout [wiki](https://github.com/himadrir/self-driving-car/wiki) for updates on progress.
 
-<br />
-<h2> 
-checkout [wiki](http://github.com/himadrir/self-driving-car/wiki) for updates on progress 
-</h2>
+## Dependencies 
+- [ackermann msgs](http://wiki.ros.org/ackermann_msgs)
+- [ld19 lidar ros driver](https://github.com/ldrobotSensorTeam/ldlidar_stl_ros)
+- [vesc ros driver](https://github.com/mit-racecar/vesc)
+- [hector slam](http://wiki.ros.org/hector_slam)
+- [amcl](http://wiki.ros.org/amcl)
+- [witmotion imu ros driver](https://github.com/ElettraSciComp/witmotion_IMU_ros)
+- [rosserial dreiver](http://wiki.ros.org/rosserial)
 
-<br />
-custom msgs for sending velocity <strong>(Float32 vel_x, Float32 vel_y, Float32 vel_z)</strong> and pid <strong>(Float32 Kp, Float32 Ki, Float32 Kd)</strong> are used.
-
-<br />
 <strong> Odom source: </strong> laser_scan_matcher + IMU + wheel_odom
