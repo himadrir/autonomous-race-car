@@ -1,0 +1,8 @@
+vesc/vesc_ackermann
+/home/himadrir/catkin_ws/devel/.private/vesc_ackermann/cmake.lock /home/himadrir/catkin_ws/devel/./cmake.lock
+/home/himadrir/catkin_ws/devel/.private/vesc_ackermann/share/vesc_ackermann/cmake/vesc_ackermannConfig.cmake /home/himadrir/catkin_ws/devel/share/vesc_ackermann/cmake/vesc_ackermannConfig.cmake
+/home/himadrir/catkin_ws/devel/.private/vesc_ackermann/share/vesc_ackermann/cmake/vesc_ackermannConfig-version.cmake /home/himadrir/catkin_ws/devel/share/vesc_ackermann/cmake/vesc_ackermannConfig-version.cmake
+/home/himadrir/catkin_ws/devel/.private/vesc_ackermann/lib/libvesc_ackermann_nodelet.so /home/himadrir/catkin_ws/devel/lib/libvesc_ackermann_nodelet.so
+/home/himadrir/catkin_ws/devel/.private/vesc_ackermann/lib/pkgconfig/vesc_ackermann.pc /home/himadrir/catkin_ws/devel/lib/pkgconfig/vesc_ackermann.pc
+/home/himadrir/catkin_ws/devel/.private/vesc_ackermann/lib/vesc_ackermann/ackermann_to_vesc_node /home/himadrir/catkin_ws/devel/lib/vesc_ackermann/ackermann_to_vesc_node
+/home/himadrir/catkin_ws/devel/.private/vesc_ackermann/lib/vesc_ackermann/vesc_to_odom_node /home/himadrir/catkin_ws/devel/lib/vesc_ackermann/vesc_to_odom_node
