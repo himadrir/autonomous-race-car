@@ -1,6 +1,6 @@
 #Configuration for EKF localization node
 
-frequency: 20
+frequency: 50
 two_d_mode: true
 publish_tf: false
 
@@ -20,8 +20,8 @@ odom0_config: [false, false, false,
 odom0_differential: false
 
 # The imu0 configuration
-imu0: /imu/data_raw
-imu0_config: [true, true, false,
+imu0: /imu/data
+imu0_config: [false, false, false,
               false, false, false,
               false, false, false,
               false, false, true,

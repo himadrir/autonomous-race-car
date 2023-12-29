@@ -2,15 +2,19 @@
 <launch>    
 	<arg name="enable_mapping" default="false"/>
 	<arg name="enable_amcl" default="false"/>
+	<arg name="enable_gmcl" default="false"/>
 	<arg name="enable_wf" default="true"/>
 	<arg name="enable_fg" default="false"/>
 	<arg name="enable_als" default="false"/>
         <arg name="enable_ppc" default="false"/>
-	<arg name="imu_en" default="false" />
-	<arg name="cam_en" default="false"/>
-
-
-	<include if="$(arg cam_en)" file="$(find realsense2_camera)/launch/rs_camera.launch"/>
+	<arg name="enable_imu" default="false" />
+	<arg name="enable_cam" default="false"/>
+	<arg name="enable_safety" default="false"/>
+	
+	<node name="path_visualiser_node" pkg="controller" type="path_gen.py" output="log"/>	
+	<node name="poseconv_node" pkg="controller" type="poseconv_node" output="log"/>
+	<include if="$(arg enable_safety)" file="$(find f110_safety)/launch/f110_safety.launch"/>
+	<include if="$(arg enable_cam)" file="$(find realsense2_camera)/launch/rs_camera.launch"/>
 	<include file="$(find controller)/launch/include/joy_node_launch.launch"/>
 
 	<node name="mux_control" pkg="controller" type="mux_control.py" output="screen"/>
@@ -33,7 +37,7 @@
 	<include file="$(find sick_tim)/launch/sick_tim310_1130000m01.launch" />
 
   	<!-- Run the IMU node and anything dependent on it if its available -->
-	<group if="$(arg imu_en)">
+	<group if="$(arg enable_imu)">
 	<include file="$(find witmotion_ros)/launch/witmotion.launch"/>
 	<node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter">
 		<param name="use_mag" value = "true"/>
@@ -52,6 +56,7 @@
 	</group>
 
 	<include if="$(arg enable_amcl)" file="$(find controller)/launch/include/amcl.launch"/>
+	<include if="$(arg enable_gmcl)" file="$(find controller)/launch/include/gmcl.launch" />
 	<include if="$(arg enable_mapping)" file="$(find hector_slam_launch)/launch/tutorial.launch" />
 	
 	<group if="$(arg enable_als)" >

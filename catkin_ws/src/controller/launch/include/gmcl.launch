@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+        <arg name="enable_map_server" default="true"/>
+        <group if="$(arg enable_map_server)">
+                <arg name="map_file" default="$(find controller)/maps/hall_half_19082023.yaml"/>
+                <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+        </group>
+        <include file="$(find gmcl)/examples/gmcl_diff.launch"/>
+
+
+</launch>

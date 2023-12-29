@@ -12,7 +12,7 @@ class Mux:
 
         self.joy_drive_sub = rospy.Subscriber("/joy_drive", AckermannDriveStamped, self.joy_drive_cb)
         self.auto_flag_sub = rospy.Subscriber("/auto_flag", Int32, self.auto_flag_cb)
-        self.wf_drive_sub = rospy.Subscriber("/wf_drive", AckermannDriveStamped, self.wf_drive_cb)
+        self.wf_drive_sub = rospy.Subscriber("/nav", AckermannDriveStamped, self.wf_drive_cb)
         self.drive_pub = rospy.Publisher("/ackermann_cmd", AckermannDriveStamped, queue_size=1)
         self.brake_flag_sub = rospy.Subscriber("/brake_bool", Bool, self.brake_flag_cb)
         self.en_car_bool_sub = rospy.Subscriber("/en_car", Bool, self.en_car_bool_cb)

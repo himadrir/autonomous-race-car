@@ -1,10 +1,7 @@
 # ROS parameter file
-# PID gains for control system
-
-pid:
-  Kp: 0.085
-  Ki: 0.08
-  Kd: 0.015
-
-broadcast_odom_flag: True
-
+ld_gain: 0.35
+min_ld: 0.4
+car_wheel_base: 0.28
+controller_freq: 20
+map_frame: map
+base_frame: base_footprint

@@ -203,8 +203,10 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+add_executable(poseconv_node src/poseconv_node.cpp)
+target_link_libraries(poseconv_node ${catkin_LIBRARIES})
 
 catkin_install_python(PROGRAMS
-   src/mux_control.py src/wall_follow.py
+   src/mux_control.py src/wall_follow.py src/follow_gap.py
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )

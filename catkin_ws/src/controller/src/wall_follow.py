@@ -87,11 +87,11 @@ def pid_controller(error, d):
     vel_msg.drive.steering_angle = -theta
 
     if abs(theta)> 0.349066:
-    	vel_msg.drive.speed = 0.75
+    	vel_msg.drive.speed = 1.0
     elif abs(theta) >  0.174533:
-        vel_msg.drive.speed = 0.75
+        vel_msg.drive.speed = 1.0
     else:
-        vel_msg.drive.speed = 0.75
+        vel_msg.drive.speed = 1.0
 
     # @todo: adaptive speed for the car
     if rospy.Time.now().to_sec() - t_print_debug > 5:
