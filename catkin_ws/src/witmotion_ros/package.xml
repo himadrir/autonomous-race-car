@@ -1,0 +1,32 @@
+<package format="2">
+    <name>witmotion_ros</name>
+    <version>1.2.28</version>
+    <description>Standalone QT-based IMU/GPS decoder nodes for Witmotion UART-compatible sensor devices</description>
+
+    <maintainer email="andrey.vukolov@elettra.eu">Andrey Vukolov</maintainer>
+    <author email="andrey.vukolov@elettra.eu">Andrey Vukolov</author>
+    <url type="website">https://wiki.ros.org/witmotion_ros</url>
+    <url type="bugtracker">https://github.com/ElettraSciComp/witmotion_IMU_ros/issues</url>
+    <url type="repository">https://github.com/ElettraSciComp/witmotion_IMU_ros</url>
+
+    <license>MIT</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+    <depend>roscpp</depend>
+    <depend>sensor_msgs</depend>
+    <depend>geometry_msgs</depend>
+    <depend>message_runtime</depend>
+    <depend>std_msgs</depend>
+    <depend>std_srvs</depend>
+    <depend>libqt5-serialport-dev</depend>
+    <depend>nav_core</depend>
+    <depend>nav_msgs</depend>
+    <depend>tf2</depend>
+    <depend>tf2_geometry_msgs</depend>
+    <depend>rosgraph_msgs</depend>
+    
+    <export>
+        <rosdoc config="rosdoc.yaml" />
+    </export>
+</package>
+

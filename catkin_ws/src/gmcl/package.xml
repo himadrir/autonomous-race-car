@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>gmcl</name>
+    <version>1.0.1</version>
+    <description>
+        <p>
+         gmcl, which stands for general monte carlo localization,
+         is a probabilistic-based localization technique for mobile robots in
+         2D-known map. It integrates the adaptive monte carlo localization
+         - amcl - approach with three different particle filter algorithms (Optimal, Intelligent,
+         Self-adaptive) to improve the performance while working in real time.                       
+        </p>
+        <p>
+         Main node structure and amcl-algorithms’s code was derived, with thanks, from Brian Gerkey's amcl package.     
+        </p>
+    </description>
+
+    <author>Mhd Ali Alshikh Khalil</author>
+    <author>adler1994@gmail.com</author>
+    <maintainer email="adler1994@gmail.com">Mhd Ali Alshikh Khalil</maintainer>
+    
+    
+  <!-- author of amcl  
+    <author>Brian P. Gerkey</author>
+    <author>contradict@gmail.com</author>
+-->
+    <license>LGPL</license>
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <build_depend>message_filters</build_depend>
+    <build_depend>tf2_geometry_msgs</build_depend>
+
+    <depend>diagnostic_updater</depend>
+    <depend>dynamic_reconfigure</depend>
+    <depend>geometry_msgs</depend>
+    <depend>nav_msgs</depend>
+    <depend>rosbag</depend>
+    <depend>roscpp</depend>
+    <depend>sensor_msgs</depend>
+    <depend>std_srvs</depend>
+    <depend>tf2</depend>
+    <depend>tf2_msgs</depend>
+    <depend>tf2_ros</depend>
+
+    <test_depend>map_server</test_depend>
+    <test_depend>rostest</test_depend>
+    <test_depend>python3-pykdl</test_depend>
+</package>

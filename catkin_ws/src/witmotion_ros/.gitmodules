@@ -1,0 +1,3 @@
+[submodule "witmotion-uart-qt"]
+	path = witmotion-uart-qt
+	url = https://github.com/ElettraSciComp/witmotion_IMU_QT.git

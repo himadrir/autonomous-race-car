@@ -1,0 +1,53 @@
+name: documentation
+on: [push, workflow_dispatch]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+    build-docs-only:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Get CMake
+            uses: symbitic/install-cmake@master
+          - name: Install Qt
+            uses: jurplel/install-qt-action@v3
+            with:
+                install-deps: true
+                cache: true
+          - name: Install Doxygen
+            run: sudo apt install doxygen doxygen-latex
+          - name: Checkout
+            uses: actions/checkout@v3
+            with:
+                repository:  ElettraSciComp/witmotion_IMU_QT
+                submodules: true
+                path: witmotion_uart
+                lfs: true
+                ref: main
+          - name: Generate CMake env
+            run: |
+              cd witmotion_uart && mkdir build && cd build
+              cmake -DBUILD_DOCS=ON -DBUILD_EXAMPLES=OFF ..
+          - name: Build documentation
+            run: cd witmotion_uart/build && make doc-witmotion-uart-qt
+          - name: Upload GitHub Pages artifacts
+            uses: actions/upload-pages-artifact@v1.0.5
+            with:
+                path: witmotion_uart/build/doc/html
+                retention-days: 90
+    deploy:
+        runs-on: ubuntu-latest
+        needs: build-docs-only
+        permissions:
+            pages: write
+            id-token: write
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+          - name: Deploy HTML documentation to GitHub Pages
+            id: deployment
+            uses: actions/deploy-pages@v1
+

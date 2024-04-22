@@ -1,0 +1,24 @@
+<launch>
+
+  <param name="/use_sim_time" value="false"/>
+
+  <arg name="use_rviz" default="false" />
+
+  <group if="$(arg use_rviz)">
+    <node pkg="rviz" type="rviz" name="rviz"
+          args="-d $(find laser_scan_matcher_odometry)/rviz/config.rviz"/>
+  </group>
+
+  #### start the laser_scan_matcher_odometry package ##############################
+
+  <node pkg="laser_scan_matcher_odometry" type="laser_scan_matcher_odometry_node"
+    name="laser_scan_matcher_odometry_node" output="screen">
+
+    <param name="max_iterations" value="15"/>
+    <param name="publish_tf" value="true"/>
+    <param name="use_imu_" value="true"/>
+    <param name="base_frame" value="base_footprint" />
+    <param name="fixed_frame" value="odom"/>
+  </node>
+
+</launch>
