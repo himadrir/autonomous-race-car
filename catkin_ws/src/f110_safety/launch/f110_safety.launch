@@ -1,0 +1,4 @@
+<launch>
+    <rosparam command="load" file="$(find f110_safety)/config/config.yaml" />
+    <node pkg="f110_safety" name="safety_node" type="safety_node" output="screen"/>
+</launch>

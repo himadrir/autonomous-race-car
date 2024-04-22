@@ -1,0 +1,8 @@
+<launch>
+
+    <rosparam command="load" file="$(find f110_pure_pursuit)/config/config.yaml" />
+    <env name="ROSCONSOLE_CONFIG_FILE" value="$(find f110_pure_pursuit)/config/rosconsole_config.conf"/>
+
+    <node pkg="f110_pure_pursuit" name="pure_pursuit_node" type="pure_pursuit_node" output="log"/>
+
+</launch>

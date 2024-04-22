@@ -1,0 +1,13 @@
+# Config file for f110_pure_pursuit package
+
+# Parameter for pure pursuit algorithm
+# A good estimate is 0-2r (According to the implementation explanation given in RI, CMU)
+lookahead_distance : 1.08
+
+# No. of Waypoints in the path
+n_way_points: 334
+
+# Speed of the car
+high_speed: 1.25
+medium_speed: 1.25
+low_speed: 1.25

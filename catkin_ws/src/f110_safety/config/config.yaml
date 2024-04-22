@@ -1,0 +1,4 @@
+# Config file for f110_safety node
+
+# Emergency Braking Threshold
+emergency_braking_threshold : 0.25

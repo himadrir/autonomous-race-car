@@ -1,0 +1,25 @@
+# Config file for f110_reactive_methods package
+
+# Lidar Scan Truncation Coverage Angle
+# (Assumes symmetric coverage about the center)
+truncated_coverage_angle : 2.0944 #3.14
+
+# High Distance rejection threshold
+max_accepted_distance : 9.0
+
+# Ranges Smoothing Filter Size
+# Dimension : 1 x (2*smoothing_filter_size-1)
+smoothing_filter_size : 3
+
+# Safety Bubble Threshold
+bubble_radius : 0.7
+
+# Steering Reactivity (towards the best point in the lidar scan)
+# High steering_angle_reactivity -> Good for taking sharp turns and avoiding obstacles
+# Less steering_angle_reactivity -> Better stable state behavior (Less Wobbly)
+steering_angle_reactivity : 1.35
+
+# Velocity
+error_based_velocities : {low: 1.0, medium: 1.0, high: 1.25}
+
+

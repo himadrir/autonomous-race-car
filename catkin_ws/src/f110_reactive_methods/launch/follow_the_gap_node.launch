@@ -1,0 +1,10 @@
+<launch>
+
+    <!-- <include file="$(find f110_safety)/launch/f110_safety.launch"/> -->
+
+    <rosparam command="load" file="$(find f110_reactive_methods)/config/config.yaml" />
+    <env name="ROSCONSOLE_CONFIG_FILE" value="$(find f110_reactive_methods)/config/rosconsole_config.conf"/>
+
+    <node pkg="f110_reactive_methods" name="follow_the_gap_node" type="follow_the_gap_node" output="screen"/>
+
+</launch>
